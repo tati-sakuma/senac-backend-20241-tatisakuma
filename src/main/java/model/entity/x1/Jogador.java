@@ -3,6 +3,7 @@ package model.entity.x1;
 import java.time.LocalDate;
 
 public class Jogador {
+	private int id;
 	private String nome;
 	private String email;
 	// private String senha;
@@ -14,13 +15,23 @@ public class Jogador {
 		super();
 	}
 
-	public Jogador(String nome, String email, LocalDate dataNascimento, int totalPartidas, double percentualVitorias) {
+	public Jogador(int id, String nome, String email, LocalDate dataNascimento, int totalPartidas,
+			double percentualVitorias) {
 		super();
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.dataNascimento = dataNascimento;
 		this.totalPartidas = totalPartidas;
 		this.percentualVitorias = percentualVitorias;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -62,5 +73,6 @@ public class Jogador {
 	public void setPercentualVitorias(double percentualVitorias) {
 		this.percentualVitorias = percentualVitorias;
 	}
+
 
 }
