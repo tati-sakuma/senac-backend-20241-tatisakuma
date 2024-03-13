@@ -1,5 +1,7 @@
 package service.vacina;
 
+import java.util.List;
+
 import model.entity.x1.Pessoa;
 import model.repository.x1.PessoaRepository;
 
@@ -17,6 +19,15 @@ public class PessoaService {
 		}
 		
 		return novaPessoa;
+	}
+
+	public boolean excluir(int id) {
+		// TODO Auto-generated method stub
+		return repository.excluir(id);
+	}
+
+	public List<Pessoa> consultarTodas() {
+		return repository.consultarTodos();
 	}
 	
 

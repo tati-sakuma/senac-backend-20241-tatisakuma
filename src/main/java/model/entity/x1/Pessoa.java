@@ -8,7 +8,7 @@ public class Pessoa {
 	private int id;
 	private String nome;
 	private String cpf;
-	private char sexo;
+	private String sexo;
 	private LocalDate dataNascimento;
 	private TipoPessoa tipo;
 	
@@ -18,7 +18,7 @@ public class Pessoa {
 	}
 
 
-	public Pessoa(int id, String nome, String cpf, char sexo, LocalDate dataNascimento, TipoPessoa tipo) {
+	public Pessoa(int id, String nome, String cpf, String sexo, LocalDate dataNascimento, TipoPessoa tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -59,12 +59,12 @@ public class Pessoa {
 	}
 
 
-	public char getSexo() {
+	public String getSexo() {
 		return sexo;
 	}
 
 
-	public void setSexo(char sexo) {
+	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 
@@ -87,6 +87,7 @@ public class Pessoa {
 	public void setTipo(TipoPessoa tipo) {
 		this.tipo = tipo;
 	}
+
 
 
 
