@@ -2,6 +2,7 @@ package controller.vacina;
 
 import java.util.List;
 
+import exception.vacina.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -10,7 +11,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import model.entity.x1.Pessoa;
+import model.entity.vacina.Pessoa;
 import service.vacina.PessoaService;
 
 @Path("/pessoa")
@@ -22,7 +23,7 @@ public class PessoaController {
 	@Path("/salvar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa salvar(Pessoa novaPessoa) {
+	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException {
 		return service.salvar(novaPessoa);
 	}
 

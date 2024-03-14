@@ -1,4 +1,4 @@
-package model.entity.x1;
+package model.entity.vacina;
 
 import java.time.LocalDate;
 

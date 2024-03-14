@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.entity.enums.x1.TipoPessoa;
-import model.entity.x1.Pessoa;
+import model.entity.vacina.Pessoa;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -19,12 +19,8 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
-			
-			if(novaPessoa.getNome().isEmpty() || novaPessoa.getNome().isBlank() || novaPessoa.getNome() == null) {
-				System.out.println("Erro: o campo nome nao pode estar vazio ou nulo.");
-			} else {
 			pstmt.setString(1, novaPessoa.getNome());
-			}
+			
 			pstmt.setString(2, novaPessoa.getCpf());
 			pstmt.setString(3, novaPessoa.getSexo());
 			pstmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
@@ -69,8 +65,6 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return retorno;
 	}
 	
-	
-
 	@Override
 	public boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
@@ -105,7 +99,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 	}
 
 	@Override
-	public ArrayList consultarTodos() {
+	public ArrayList<Pessoa> consultarTodos() {
 		ArrayList<Pessoa> pessoas = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
