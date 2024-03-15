@@ -1,4 +1,4 @@
-package model.repository.x1;
+package model.repository.vacina;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import model.entity.enums.x1.TipoPessoa;
 import model.entity.vacina.Pessoa;
+import model.entity.vacina.Vacina;
+import model.entity.vacina.Vacinacao;
+import model.repository.x1.Banco;
+import model.repository.x1.BaseRepository;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -42,6 +46,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return novaPessoa;
 	}
 	
+	
 	public boolean verificarExistenciaRegistroPorCpf(Pessoa novaPessoa) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -65,6 +70,39 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return retorno;
 	}
 	
+	/*public ArrayList<Vacinacao> vacinacoesPorId(int id){
+		
+		ArrayList<Vacinacao> vacinacoes = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		String query = "SELECT * FROM Aplicacao_vacina where id_pessoa = " + id;
+		
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Vacinacao vacinacao = new Vacinacao();
+				Vacina vacina = new Vacina();
+				
+				
+				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
+				vacinacao.setSexo(resultado.getString("SEXO"));
+				vacinacao.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate()); 
+				vacinacao.setTipo(TipoPessoa.valueOf(resultado.getString("TIPO")));
+				vacinacoes.add(vacinacao);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar todas as pessoas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return pessoas;
+	}
+	*/
 	@Override
 	public boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
@@ -97,6 +135,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 	@Override
 	public ArrayList<Pessoa> consultarTodos() {

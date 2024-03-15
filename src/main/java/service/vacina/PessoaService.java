@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import exception.vacina.ControleVacinasException;
 import model.entity.vacina.Pessoa;
-import model.repository.x1.PessoaRepository;
+import model.repository.vacina.PessoaRepository;
 
 public class PessoaService {
 	
@@ -14,10 +14,9 @@ public class PessoaService {
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException {
 		
 		if(repository.verificarExistenciaRegistroPorCpf(novaPessoa)) {
-			 throw new ControleVacinasException("\nUsuário já cadastrado.");
+			 throw new ControleVacinasException("\nPessoa já cadastrado.");
 		}else {
 			this.validarPessoa(novaPessoa);
-			
 			novaPessoa = repository.salvar(novaPessoa);
 		}
 		
