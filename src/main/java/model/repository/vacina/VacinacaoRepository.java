@@ -1,22 +1,66 @@
 package model.repository.vacina;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import model.entity.vacina.Vacina;
 import model.entity.vacina.Vacinacao;
+import model.repository.x1.Banco;
 import model.repository.x1.BaseRepository;
+import service.vacina.VacinaService;
 
 public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 
 	@Override
 	public Vacinacao salvar(Vacinacao novaVacinacao) {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "INSERT INTO Aplicacao_Vacina (ID_PESSOA, ID_VACINA, DATA_VACINA, AVALIACAO) VALUES (?, ?, ?, ?)";
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+		try {
+			pstmt.setInt(1, novaVacinacao.getIdPessoa());
+			pstmt.setInt(2, novaVacinacao.getVacina().getId());
+			pstmt.setDate(3, Date.valueOf(novaVacinacao.getData()));
+			pstmt.setInt(4, novaVacinacao.getAvaliacao());
+			pstmt.execute();
+			ResultSet resultado = pstmt.getGeneratedKeys();
+			
+			if(resultado.next()) {
+				novaVacinacao.setId(resultado.getInt(1));
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao salvar nova vacina");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		
+		return novaVacinacao;
 	}
 
 	@Override
 	public boolean excluir(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		boolean excluiu = false;
+		String query = "DELETE FROM Aplicacao_vacina WHERE id = " + id;
+		try {
+			if(stmt.executeUpdate(query) == 1) {
+				excluiu = true;
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao excluir Vacinação.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return excluiu;
 	}
 
 	@Override
@@ -26,15 +70,74 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	}
 
 	@Override
-	public Vacinacao consultarPorId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vacinacao consultarPorId(int id)  {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		
+		String query = " SELECT * FROM Aplicacao_vacina WHERE ID = " + id;
+		Vacinacao vacinacao = new Vacinacao();
+		Vacina vacina = new Vacina();
+		VacinaService vacinaService = new VacinaService();
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
+				vacinacao.setId(id);
+				vacinacao.setIdPessoa(resultado.getInt("ID_PESSOA"));
+				vacinacao.setVacina(vacina);
+				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
+				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar Vacinação com id (" + id + ")");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacinacao;
 	}
 
 	@Override
 	public ArrayList<Vacinacao> consultarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vacinacao> vacinacoes = new ArrayList();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		
+		String query = "SELECT * FROM APLICACAO_VACINA;";
+		
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			
+			while(resultado.next()){
+				Vacinacao vacinacao = new Vacinacao();
+				Vacina vacina = new Vacina();
+				VacinaService vacinaService = new VacinaService();
+				vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
+				
+				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
+				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
+				vacinacao.setVacina(vacina);
+				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
+				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
+				vacinacoes.add(vacinacao);
+			}
+			
+		} catch (SQLException erro) {
+			System.out.println("Erro ao executar consultar todas as vacinações");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		
+		return vacinacoes;
 	}
 	
 }

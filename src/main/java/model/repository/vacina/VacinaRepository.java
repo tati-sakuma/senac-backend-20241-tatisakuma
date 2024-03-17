@@ -5,13 +5,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-
+import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacina;
 import model.repository.x1.Banco;
 import model.repository.x1.BaseRepository;
 
-public class VacinaRepository implements BaseRepository <Vacina> {
+public class VacinaRepository implements BaseRepository<Vacina> {
 
 	@Override
 	public Vacina salvar(Vacina novaVacina) {
@@ -26,8 +27,8 @@ public class VacinaRepository implements BaseRepository <Vacina> {
 			pstmt.setInt(5, novaVacina.getEstagio());
 			pstmt.execute();
 			ResultSet resultado = pstmt.getGeneratedKeys();
-			
-			if(resultado.next()) {
+
+			if (resultado.next()) {
 				novaVacina.setId(resultado.getInt(1));
 			}
 		} catch (SQLException erro) {
@@ -37,16 +38,28 @@ public class VacinaRepository implements BaseRepository <Vacina> {
 			Banco.closeStatement(pstmt);
 			Banco.closeConnection(conn);
 		}
-		
+
 		return novaVacina;
 	}
-	
-	
 
 	@Override
 	public boolean excluir(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		boolean excluiu = false;
+		String query = "DELETE FROM vacina WHERE id = " + id;
+		try {
+			if (stmt.executeUpdate(query) == 1) {
+				excluiu = true;
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao excluir Vacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return excluiu;
 	}
 
 	@Override
@@ -57,14 +70,75 @@ public class VacinaRepository implements BaseRepository <Vacina> {
 
 	@Override
 	public Vacina consultarPorId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+
+		ResultSet resultado = null;
+		Vacina vacina = new Vacina();
+		String query = " SELECT * FROM vacina WHERE id = " + id;
+
+		try {
+			resultado = stmt.executeQuery(query);
+			if (resultado.next()) {
+				VacinaRepository vacinaRepository = new VacinaRepository();
+
+				vacina.setId(id);
+				vacina.setNome(resultado.getString("NOME"));
+				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(id));
+				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());
+				vacina.setEstagio(resultado.getInt("estagio"));
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao executar consultar partida com id (" + id + ")");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacina;
+	}
+
+	
+	private Pessoa buscarPesquisadorID(int id) {
+		PessoaRepository pessoaRepository = new PessoaRepository();
+		return pessoaRepository.consultarPorId(id);
 	}
 
 	@Override
 	public ArrayList<Vacina> consultarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Vacina> vacinas = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+
+		ResultSet resultado = null;
+		String query = "SELECT * FROM vacina;";
+
+		try {
+			resultado = stmt.executeQuery(query);
+			while (resultado.next()) {
+				Vacina vacina = new Vacina();
+				VacinaRepository vacinaRepository = new VacinaRepository();
+				int idPesquisador = Integer.parseInt(resultado.getString("ID"));
+				
+				vacina.setId(idPesquisador);
+				vacina.setNome(resultado.getString("NOME"));
+				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(idPesquisador));
+				vacina.setEstagio(resultado.getInt("estagio"));
+				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());
+				vacinas.add(vacina);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao executar consultar todas as vacinas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacinas;
 	}
-	
+
 }

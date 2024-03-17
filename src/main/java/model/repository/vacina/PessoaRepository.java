@@ -14,6 +14,7 @@ import model.entity.vacina.Vacina;
 import model.entity.vacina.Vacinacao;
 import model.repository.x1.Banco;
 import model.repository.x1.BaseRepository;
+import service.vacina.VacinaService;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -70,7 +71,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return retorno;
 	}
 	
-	/*public ArrayList<Vacinacao> vacinacoesPorId(int id){
+	public ArrayList<Vacinacao> vacinacoesPorId(int id){
 		
 		ArrayList<Vacinacao> vacinacoes = new ArrayList<>();
 		Connection conn = Banco.getConnection();
@@ -84,25 +85,27 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			while(resultado.next()){
 				Vacinacao vacinacao = new Vacinacao();
 				Vacina vacina = new Vacina();
+				VacinaService vacinaService = new VacinaService();
+				vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
 				
-				
-				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
-				vacinacao.setSexo(resultado.getString("SEXO"));
-				vacinacao.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate()); 
-				vacinacao.setTipo(TipoPessoa.valueOf(resultado.getString("TIPO")));
+				vacinacao.setId(id);
+				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
+				vacinacao.setVacina(vacina);
+				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
+				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
 				vacinacoes.add(vacinacao);
 			}
 		} catch (SQLException erro){
-			System.out.println("Erro ao executar consultar todas as pessoas");
+			System.out.println("Erro ao executar consultar vacinações do id " + id);
 			System.out.println("Erro: " + erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
 			Banco.closeStatement(stmt);
 			Banco.closeConnection(conn);
 		}
-		return pessoas;
+		return vacinacoes;
 	}
-	*/
+	
 	@Override
 	public boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
@@ -132,8 +135,31 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 
 	@Override
 	public Pessoa consultarPorId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		Pessoa pessoa = new Pessoa();
+		String query = " SELECT * FROM pessoa WHERE id = " + id;
+		
+		try{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()){
+				pessoa.setId(Integer.parseInt(resultado.getString("ID")));
+				pessoa.setNome(resultado.getString("NOME"));
+				pessoa.setCpf(resultado.getString("CPF"));;
+				pessoa.setSexo(resultado.getString("SEXO"));;
+				pessoa.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate());
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar carta com id (" + id + ")");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return pessoa;
 	}
 	
 

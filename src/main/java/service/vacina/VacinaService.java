@@ -30,19 +30,21 @@ public class VacinaService {
 	}
 
 	public boolean excluir(int id) {
-		return false;
+		
+		return repository.excluir(id);
 	}
 
 	public boolean alterar(Vacina vacina) {
 		return false;
 	}
 
-	public Object consultarPorId(int id) {
-		return null;
+	public Vacina consultarPorId(Integer id) {
+				
+		return repository.consultarPorId(id);
 	}
 
-	public ArrayList<Vacina> consultarTodos() {
-		return null;
+	public ArrayList<Vacina> consultarTodas() {
+		return repository.consultarTodos();
 	}
 
 }

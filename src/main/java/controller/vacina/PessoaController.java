@@ -12,6 +12,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.vacina.Pessoa;
+import model.entity.vacina.Vacinacao;
 import service.vacina.PessoaService;
 
 @Path("/pessoa")
@@ -35,11 +36,22 @@ public class PessoaController {
 	
 
 	@GET
+	@Path("consultar/{id}")
+	public Pessoa consultarPorId(@PathParam("id") int id) {
+		return service.consultarPorId(id);
+	}
+	
+	@GET
 	@Path("/todas")
 	public List<Pessoa> consultarTodas(){
 		 return service.consultarTodas();
 	}
 	
+	@GET
+	@Path("/vacinacoes/{id}")
+	public List<Vacinacao> consultarVacinacoes(@PathParam("id") int id){
+		return service.consultarVacinacoes(id);
+	}
 	
 	
 }

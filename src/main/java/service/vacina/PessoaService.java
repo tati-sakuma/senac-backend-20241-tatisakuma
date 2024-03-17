@@ -1,10 +1,12 @@
 package service.vacina;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import exception.vacina.ControleVacinasException;
 import model.entity.vacina.Pessoa;
+import model.entity.vacina.Vacinacao;
 import model.repository.vacina.PessoaRepository;
 
 public class PessoaService {
@@ -51,9 +53,17 @@ public class PessoaService {
 		return repository.excluir(id);
 	}
 
+	public Pessoa consultarPorId(int id) {
+		
+		return repository.consultarPorId(id);
+	}
+	
 	public List<Pessoa> consultarTodas() {
 		return repository.consultarTodos();
 	}
 	
-
+	public List<Vacinacao> consultarVacinacoes(Integer id){
+				
+		return repository.vacinacoesPorId(id);
+	}
 }

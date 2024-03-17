@@ -1,9 +1,14 @@
 package controller.vacina;
 
+import java.util.List;
+
 import exception.vacina.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.vacina.Vacina;
@@ -20,6 +25,23 @@ public class VacinaController {
 	public Vacina salvar(Vacina novaVacina) throws ControleVacinasException {
 		return service.salvar(novaVacina);
 	}
-
+	
+	@DELETE
+	@Path("excluir/{id}")
+	public boolean excluir(@PathParam("id") int id) {
+		return service.excluir(id);
+	}
+	
+	@GET
+	@Path("consultar/{id}")
+	public Vacina consultarPorId(@PathParam("id") int id) throws ControleVacinasException {
+		return service.consultarPorId(id);
+	}
+	
+	@GET
+	@Path("/todas")
+	public List<Vacina> consultarTodas(){
+		 return service.consultarTodas();
+	}
 }
 
