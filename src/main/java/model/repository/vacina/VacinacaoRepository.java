@@ -103,7 +103,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 
 	@Override
 	public ArrayList<Vacinacao> consultarTodos() {
-		ArrayList<Vacinacao> vacinacoes = new ArrayList();
+		ArrayList<Vacinacao> vacinacoes = new ArrayList<Vacinacao>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -113,12 +113,11 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		
 		try {
 			resultado = stmt.executeQuery(query);
+			VacinaRepository vacinaRepository = new VacinaRepository();
+			Vacinacao vacinacao = new Vacinacao();
 			
 			while(resultado.next()){
-				Vacinacao vacinacao = new Vacinacao();
-				Vacina vacina = new Vacina();
-				VacinaService vacinaService = new VacinaService();
-				vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
+				Vacina vacina = vacinaRepository.consultarPorId(resultado.getInt("ID_VACINA"));
 				
 				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
 				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
@@ -137,6 +136,40 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			Banco.closeConnection(conn);
 		}
 		
+		return vacinacoes;
+	}
+	
+public ArrayList<Vacinacao> vacinacoesPorId(int id){
+		
+		ArrayList<Vacinacao> vacinacoes = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		String query = "SELECT * FROM Aplicacao_vacina where id_pessoa = " + id;
+		
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Vacinacao vacinacao = new Vacinacao();
+				VacinaService vacinaService = new VacinaService();
+				Vacina vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
+				
+				vacinacao.setId(id);
+				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
+				vacinacao.setVacina(vacina);
+				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
+				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
+				vacinacoes.add(vacinacao);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar vacinações do id " + id);
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
 		return vacinacoes;
 	}
 	

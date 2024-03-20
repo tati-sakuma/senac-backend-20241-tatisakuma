@@ -10,11 +10,8 @@ import java.util.ArrayList;
 
 import model.entity.enums.x1.TipoPessoa;
 import model.entity.vacina.Pessoa;
-import model.entity.vacina.Vacina;
-import model.entity.vacina.Vacinacao;
 import model.repository.x1.Banco;
 import model.repository.x1.BaseRepository;
-import service.vacina.VacinaService;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -25,7 +22,6 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			pstmt.setString(1, novaPessoa.getNome());
-			
 			pstmt.setString(2, novaPessoa.getCpf());
 			pstmt.setString(3, novaPessoa.getSexo());
 			pstmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
@@ -43,7 +39,6 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			Banco.closeStatement(pstmt);
 			Banco.closeConnection(conn);
 		}
-		
 		return novaPessoa;
 	}
 	
@@ -71,40 +66,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return retorno;
 	}
 	
-	public ArrayList<Vacinacao> vacinacoesPorId(int id){
-		
-		ArrayList<Vacinacao> vacinacoes = new ArrayList<>();
-		Connection conn = Banco.getConnection();
-		Statement stmt = Banco.getStatement(conn);
-		
-		ResultSet resultado = null;
-		String query = "SELECT * FROM Aplicacao_vacina where id_pessoa = " + id;
-		
-		try{
-			resultado = stmt.executeQuery(query);
-			while(resultado.next()){
-				Vacinacao vacinacao = new Vacinacao();
-				Vacina vacina = new Vacina();
-				VacinaService vacinaService = new VacinaService();
-				vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
-				
-				vacinacao.setId(id);
-				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
-				vacinacao.setVacina(vacina);
-				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
-				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
-				vacinacoes.add(vacinacao);
-			}
-		} catch (SQLException erro){
-			System.out.println("Erro ao executar consultar vacinações do id " + id);
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closeResultSet(resultado);
-			Banco.closeStatement(stmt);
-			Banco.closeConnection(conn);
-		}
-		return vacinacoes;
-	}
+	
 	
 	@Override
 	public boolean excluir(int id) {
@@ -195,6 +157,8 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		}
 		return pessoas;
 	}
+
+
 
 	
 	

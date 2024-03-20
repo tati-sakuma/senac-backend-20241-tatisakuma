@@ -11,7 +11,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacinacao;
 import service.vacina.VacinacaoService;
 

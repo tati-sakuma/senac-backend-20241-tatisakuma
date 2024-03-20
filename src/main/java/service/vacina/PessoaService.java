@@ -1,6 +1,5 @@
 package service.vacina;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +7,7 @@ import exception.vacina.ControleVacinasException;
 import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacinacao;
 import model.repository.vacina.PessoaRepository;
+import model.repository.vacina.VacinacaoRepository;
 
 public class PessoaService {
 	
@@ -63,7 +63,7 @@ public class PessoaService {
 	}
 	
 	public List<Vacinacao> consultarVacinacoes(Integer id){
-				
-		return repository.vacinacoesPorId(id);
+				VacinacaoRepository vacinacaoRepository = new VacinacaoRepository();
+		return vacinacaoRepository.vacinacoesPorId(id);
 	}
 }
