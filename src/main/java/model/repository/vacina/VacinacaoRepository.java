@@ -65,10 +65,31 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 
 	@Override
 	public boolean alterar(Vacinacao vacinacao) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		boolean retorno = false;
+		
+		String query = " UPDATE aplicacao_vacina SET "
+				+ " ID_PESSOA= " + vacinacao.getIdPessoa()
+				+ " , ID_VACINA=" + vacinacao.getVacina().getId()
+				+ " , DATA_VACINA= '" + vacinacao.getData()
+				+ "' , AVALIACAO= " + vacinacao.getAvaliacao()
+				+ " WHERE ID= " + vacinacao.getId();
+		try {
+			if(stmt.executeUpdate(query) == 1) {
+				retorno = true;
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao executar a query do método alterar vacinação!");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		
+		return retorno;
 	}
-
+	
 	@Override
 	public Vacinacao consultarPorId(int id)  {
 		Connection conn = Banco.getConnection();

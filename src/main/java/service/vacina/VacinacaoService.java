@@ -23,9 +23,8 @@ public class VacinacaoService implements BaseRepository<Vacinacao>{
 	}
 
 	@Override
-	public boolean alterar(Vacinacao entidade) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean alterar(Vacinacao vacinacao) {
+		return repository.alterar(vacinacao);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -24,6 +25,14 @@ public class VacinacaoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Vacinacao salvar(Vacinacao novaVacinacao) throws ControleVacinasException {
 		return service.salvar(novaVacinacao);
+	}
+	
+	@PUT
+	@Path("/alterar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public Boolean atualizarUsuarioController(Vacinacao vacinacao) {
+		return service.alterar(vacinacao);
 	}
 	
 	@DELETE

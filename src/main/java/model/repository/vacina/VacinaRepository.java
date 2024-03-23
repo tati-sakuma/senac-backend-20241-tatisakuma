@@ -16,12 +16,12 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 
 	@Override
 	public Vacina salvar(Vacina novaVacina) {
-		String query = "INSERT INTO Vacina (nome, pais_origem, id_pesquisador, DATA_INICIO_PESQUISA, estagio) VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Vacina (nome, ID_PAIS, id_pesquisador, DATA_INICIO_PESQUISA, estagio) VALUES (?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			pstmt.setString(1, novaVacina.getNome());
-			pstmt.setString(2, novaVacina.getPaisOrigem());
+			pstmt.setInt(2, novaVacina.getPaisOrigem().getIdPais());
 			pstmt.setInt(3, novaVacina.getPesquisadorResponsavel().getId());
 			pstmt.setDate(4, Date.valueOf(novaVacina.getDataInicioPesquisa()));
 			pstmt.setInt(5, novaVacina.getEstagio());
@@ -81,10 +81,11 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			resultado = stmt.executeQuery(query);
 			if (resultado.next()) {
 				VacinaRepository vacinaRepository = new VacinaRepository();
+				PaisRepository paisRepository = new PaisRepository();
 
 				vacina.setId(id);
 				vacina.setNome(resultado.getString("NOME"));
-				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setPaisOrigem(paisRepository.consultarPorId(id));
 				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(id));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());
 				vacina.setEstagio(resultado.getInt("estagio"));
@@ -120,11 +121,12 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			while (resultado.next()) {
 				Vacina vacina = new Vacina();
 				VacinaRepository vacinaRepository = new VacinaRepository();
+				PaisRepository paisRepository = new PaisRepository();
 				int idPesquisador = Integer.parseInt(resultado.getString("ID"));
 				
 				vacina.setId(idPesquisador);
 				vacina.setNome(resultado.getString("NOME"));
-				vacina.setPaisOrigem(resultado.getString("PAIS_ORIGEM"));
+				vacina.setPaisOrigem(paisRepository.consultarPorId(idPesquisador));
 				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(idPesquisador));
 				vacina.setEstagio(resultado.getInt("estagio"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());

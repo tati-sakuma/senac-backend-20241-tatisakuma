@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
 
-
 import model.entity.vacina.Pais;
 import model.repository.x1.Banco;
 import model.repository.x1.BaseRepository;
@@ -41,7 +40,7 @@ public class PaisRepository implements BaseRepository<Pais> {
 		return novoPais;
 	}
 	
-	public boolean verificarSePaisJaCadastrado(String pais, String sigla) {
+	/*public boolean verificarSePaisJaCadastrado(String pais, String sigla) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -66,7 +65,7 @@ public class PaisRepository implements BaseRepository<Pais> {
 		}
 		
 		return retorno;
-	}
+	} */
 	
 	@Override
 	public boolean excluir(int id) {
@@ -82,8 +81,29 @@ public class PaisRepository implements BaseRepository<Pais> {
 
 	@Override
 	public Pais consultarPorId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		Pais pais = new Pais();
+		String query = " SELECT * FROM pais WHERE id = " + id;
+		
+		try{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()){
+				pais.setIdPais(id);
+				pais.setPais(resultado.getString("NOME"));
+				pais.setSigla(resultado.getNString("SIGLA"));
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar País com id (" + id + ")");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return pais;
 	}
 
 	@Override

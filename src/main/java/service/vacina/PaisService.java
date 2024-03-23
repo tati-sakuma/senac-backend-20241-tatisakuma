@@ -10,7 +10,7 @@ public class PaisService {
 	public Pais salvar(Pais novoPais) throws ControleVacinasException {
 		/*if (!repository.verificarSePaisJaCadastrado(novoPais.getPais(), novoPais.getSigla())) {
 			throw new ControleVacinasException("País já cadastrado!");
-		}*/
+		} */
 		return repository.salvar(novoPais);
 	}
 

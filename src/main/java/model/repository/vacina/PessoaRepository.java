@@ -17,7 +17,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 
 	@Override
 	public Pessoa salvar(Pessoa novaPessoa){
-		String query = "INSERT INTO Pessoa (nome, CPF, sexo, dataNascimento, tipo) VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Pessoa (nome, CPF, sexo, dataNascimento, tipo, id_pais) VALUES (?, ?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
@@ -26,6 +26,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			pstmt.setString(3, novaPessoa.getSexo());
 			pstmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
 			pstmt.setString(5, novaPessoa.getTipo().toString());
+			pstmt.setInt(6, novaPessoa.getPais().getIdPais());
 			pstmt.execute();
 			ResultSet resultado = pstmt.getGeneratedKeys();
 			
@@ -105,6 +106,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		String query = " SELECT * FROM pessoa WHERE id = " + id;
 		
 		try{
+			PaisRepository paisRepository = new PaisRepository();
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()){
 				pessoa.setId(Integer.parseInt(resultado.getString("ID")));
@@ -112,9 +114,11 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 				pessoa.setCpf(resultado.getString("CPF"));;
 				pessoa.setSexo(resultado.getString("SEXO"));;
 				pessoa.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate());
+				pessoa.setTipo(TipoPessoa.valueOf(resultado.getString("TIPO")));
+				pessoa.setPais(paisRepository.consultarPorId(id));
 			}
 		} catch (SQLException erro){
-			System.out.println("Erro ao executar consultar carta com id (" + id + ")");
+			System.out.println("Erro ao executar consultar pessoa com id (" + id + ")");
 			System.out.println("Erro: " + erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
@@ -124,7 +128,6 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return pessoa;
 	}
 	
-
 	@Override
 	public ArrayList<Pessoa> consultarTodos() {
 		ArrayList<Pessoa> pessoas = new ArrayList<>();
@@ -138,6 +141,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
 				Pessoa pessoa = new Pessoa();
+				PaisRepository paisRepository = new PaisRepository();
 				
 				pessoa.setId(Integer.parseInt(resultado.getString("ID")));
 				pessoa.setNome(resultado.getString("NOME"));
@@ -145,6 +149,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 				pessoa.setSexo(resultado.getString("SEXO"));
 				pessoa.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate()); 
 				pessoa.setTipo(TipoPessoa.valueOf(resultado.getString("TIPO")));
+				pessoa.setPais(paisRepository.consultarPorId(Integer.parseInt(resultado.getString("ID"))));
 				pessoas.add(pessoa);
 			}
 		} catch (SQLException erro){
