@@ -16,7 +16,7 @@ public class PessoaService {
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException {
 		
 		if(repository.verificarExistenciaRegistroPorCpf(novaPessoa)) {
-			 throw new ControleVacinasException("\nPessoa já cadastrado.");
+			 throw new ControleVacinasException("\nPessoa já cadastrada.");
 		}else {
 			this.validarPessoa(novaPessoa);
 			novaPessoa = repository.salvar(novaPessoa);
@@ -43,13 +43,24 @@ public class PessoaService {
 	    if (Objects.requireNonNullElse(novaPessoa.getTipo().toString(), "").isEmpty()) {
 	    	mensagemErro += "Erro: o campo tipo nao pode estar vazio ou nulo.";
 	    }
+	    if (novaPessoa.getPais() == null) {
+	    	mensagemErro += "Erro: o campo Pais nao pode ser nulo.";
+	    }
 	    
 	    if(!mensagemErro.isEmpty()) {
 	    	throw new ControleVacinasException(mensagemErro);
 	    }
 	}
 
-	public boolean excluir(int id) {
+	private void verificarSeJaVacinado (int idPessoa) throws ControleVacinasException  {
+		VacinacaoRepository vacinacaoRepository = new VacinacaoRepository();
+		if (!vacinacaoRepository.vacinacoesPorIdPessoa(idPessoa).isEmpty()) {
+			throw new ControleVacinasException("Não é possível excluir pessoa que já foi vacinada!");
+		}
+	}
+	
+	public boolean excluir(int id) throws ControleVacinasException {
+		this.verificarSeJaVacinado(id);
 		return repository.excluir(id);
 	}
 
@@ -64,6 +75,6 @@ public class PessoaService {
 	
 	public List<Vacinacao> consultarVacinacoes(Integer id){
 				VacinacaoRepository vacinacaoRepository = new VacinacaoRepository();
-		return vacinacaoRepository.vacinacoesPorId(id);
+		return vacinacaoRepository.vacinacoesPorIdPessoa(id);
 	}
 }

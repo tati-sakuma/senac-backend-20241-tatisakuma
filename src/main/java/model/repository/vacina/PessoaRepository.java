@@ -162,9 +162,4 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		}
 		return pessoas;
 	}
-
-
-
-	
-	
 }

@@ -82,6 +82,7 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			if (resultado.next()) {
 				VacinaRepository vacinaRepository = new VacinaRepository();
 				PaisRepository paisRepository = new PaisRepository();
+				
 
 				vacina.setId(id);
 				vacina.setNome(resultado.getString("NOME"));
@@ -89,6 +90,8 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(id));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());
 				vacina.setEstagio(resultado.getInt("estagio"));
+				
+				
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao executar consultar partida com id (" + id + ")");
@@ -100,7 +103,6 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		}
 		return vacina;
 	}
-
 	
 	private Pessoa buscarPesquisadorID(int id) {
 		PessoaRepository pessoaRepository = new PessoaRepository();
@@ -128,7 +130,7 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 				vacina.setNome(resultado.getString("NOME"));
 				vacina.setPaisOrigem(paisRepository.consultarPorId(idPesquisador));
 				vacina.setPesquisadorResponsavel(vacinaRepository.buscarPesquisadorID(idPesquisador));
-				vacina.setEstagio(resultado.getInt("estagio"));
+				vacina.setEstagio(resultado.getInt("ESTAGIO"));
 				vacina.setDataInicioPesquisa(resultado.getDate("DATA_INICIO_PESQUISA").toLocalDate());
 				vacinas.add(vacina);
 			}
@@ -141,6 +143,5 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			Banco.closeConnection(conn);
 		}
 		return vacinas;
-	}
-
+	}		
 }

@@ -42,9 +42,15 @@ public class VacinacaoController {
 	}
 	
 	@GET
-	@Path("consultar/{id}")
-	public Vacinacao consultarPorId(@PathParam("id") int id) {
-		return service.consultarPorId(id);
+	@Path("consultar/pessoa/{id}")
+	public Vacinacao consultarPorIdPessoa(@PathParam("id") int id) {
+		return service.consultarPorIdPessoa(id);
+	}
+	
+	@GET
+	@Path("consultar/vacina/{id}")
+	public Vacinacao consultarPorIdVacina(@PathParam("id") int id) {
+		return service.consultarPorIdVacina(id);
 	}
 	
 	@GET
