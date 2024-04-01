@@ -165,6 +165,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		ResultSet resultado = null;
 		String query = "SELECT * FROM Aplicacao_vacina where id_pessoa = " + id;
 
+		
 		try {
 			resultado = stmt.executeQuery(query);
 			while (resultado.next()) {
