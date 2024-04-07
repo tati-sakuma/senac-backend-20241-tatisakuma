@@ -115,7 +115,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 				pessoa.setSexo(resultado.getString("SEXO"));;
 				pessoa.setDataNascimento(resultado.getDate("DATANASCIMENTO").toLocalDate());
 				pessoa.setTipo(TipoPessoa.valueOf(resultado.getString("TIPO")));
-				pessoa.setPais(paisRepository.consultarPorId(id));
+				pessoa.setPais(paisRepository.consultarPorId(resultado.getInt("ID_PAIS")));
 			}
 		} catch (SQLException erro){
 			System.out.println("Erro ao executar consultar pessoa com id (" + id + ")");

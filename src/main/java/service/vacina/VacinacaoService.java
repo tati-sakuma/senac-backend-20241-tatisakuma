@@ -29,6 +29,12 @@ public class VacinacaoService {
 		this.validarAplicacao(novaVacinacao);
 
 		novaVacinacao = repository.salvar(novaVacinacao);
+
+		double media = repository.calcularMediaVacina(novaVacinacao.getVacina().getId());
+
+		VacinaService vacinaService = new VacinaService();
+		vacinaService.atualizarMediaVacina(novaVacinacao.getVacina().getId(), media);
+
 		return novaVacinacao;
 	}
 
@@ -37,7 +43,8 @@ public class VacinacaoService {
 		PessoaRepository pessoaRepository = new PessoaRepository();
 		Pessoa pessoa = pessoaRepository.consultarPorId(novaVacinacao.getIdPessoa());
 
-		if (novaVacinacao.getVacina().getEstagio() == 1 && (pessoa.getTipo() == TipoPessoa.PUBLICO_GERAL|| pessoa.getTipo() == TipoPessoa.VOLUNTARIO)) {
+		if (novaVacinacao.getVacina().getEstagio() == 1
+				&& (pessoa.getTipo() == TipoPessoa.PUBLICO_GERAL || pessoa.getTipo() == TipoPessoa.VOLUNTARIO)) {
 			mensagemErro += "Estágio 1: apenas pesquisador pode receber essa vacina!";
 		}
 

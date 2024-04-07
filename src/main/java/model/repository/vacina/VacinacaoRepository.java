@@ -19,7 +19,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	@Override
 	public Vacinacao salvar(Vacinacao novaVacinacao) {
 		String query = "INSERT INTO Aplicacao_Vacina (ID_PESSOA, ID_VACINA, DATA_VACINA, AVALIACAO) VALUES (?, ?, ?, ?)";
-		
+
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
@@ -138,7 +138,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 				Vacina vacina = vacinaRepository.consultarPorId(resultado.getInt("ID_VACINA"));
 
 				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
-				vacinacao.setIdPessoa(Integer.parseInt(resultado.getString("ID_PESSOA")));
+				vacinacao.setIdPessoa(resultado.getInt("ID_PESSOA"));
 				vacinacao.setVacina(vacina);
 				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
 				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
@@ -165,7 +165,6 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		ResultSet resultado = null;
 		String query = "SELECT * FROM Aplicacao_vacina where id_pessoa = " + id;
 
-		
 		try {
 			resultado = stmt.executeQuery(query);
 			while (resultado.next()) {
@@ -222,5 +221,31 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			Banco.closeConnection(conn);
 		}
 		return vacinacoes;
+	}
+
+	public double calcularMediaVacina(int id) {
+		double media = 0;
+
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		String query = " SELECT avg(AVALIACAO) FROM Aplicacao_vacina where id_vacina = " + id;
+
+		try {
+			resultado = stmt.executeQuery(query);
+
+			if (resultado.next()) {
+				media = resultado.getDouble(1);
+			}
+
+		} catch (SQLException erro) {
+			System.out.println("Erro ao executar atualizar Média da vacina de id " + id);
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return media;
 	}
 }
