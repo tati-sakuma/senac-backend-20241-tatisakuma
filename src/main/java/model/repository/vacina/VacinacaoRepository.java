@@ -132,10 +132,10 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		try {
 			resultado = stmt.executeQuery(query);
 			VacinaRepository vacinaRepository = new VacinaRepository();
-			Vacinacao vacinacao = new Vacinacao();
 
 			while (resultado.next()) {
 				Vacina vacina = vacinaRepository.consultarPorId(resultado.getInt("ID_VACINA"));
+				Vacinacao vacinacao = new Vacinacao();
 
 				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
 				vacinacao.setIdPessoa(resultado.getInt("ID_PESSOA"));
