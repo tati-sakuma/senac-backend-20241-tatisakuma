@@ -8,6 +8,7 @@ import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacina;
 import model.repository.vacina.VacinaRepository;
 import model.repository.vacina.VacinacaoRepository;
+import model.seletor.vacina.VacinaSeletor;
 
 public class VacinaService {
 	VacinaRepository repository = new VacinaRepository();
@@ -59,4 +60,7 @@ public class VacinaService {
 		repository.atualizarMediaVacina(idVacina, media);
 	}
 
+	public ArrayList<Vacina> consultarComFiltro(VacinaSeletor seletor) {
+		return repository.consultarComFiltro(seletor);
+	}
 }
