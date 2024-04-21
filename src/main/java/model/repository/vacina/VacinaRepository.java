@@ -226,7 +226,6 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			primeiro = false;
 
 		}
-		
 
 		try {
 			resultado = stmt.executeQuery(query);
