@@ -77,4 +77,8 @@ public class PessoaService {
 				VacinacaoRepository vacinacaoRepository = new VacinacaoRepository();
 		return vacinacaoRepository.vacinacoesPorIdPessoa(id);
 	}
+	
+	public List<Pessoa> consultarPesquisadores(){
+		return repository.consultarPesquisadores();
+	}
 }
