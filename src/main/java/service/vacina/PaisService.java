@@ -19,4 +19,8 @@ public class PaisService {
 	public ArrayList<Pais> consultarTodos(){
 		return repository.consultarTodos();
 	}
+	
+	public boolean excluir(int id) throws ControleVacinasException {
+		return repository.excluir(id);
+	}
 }
