@@ -13,7 +13,7 @@ public class Pessoa {
 	private LocalDate dataNascimento;
 	private Pais pais;
 	private TipoPessoa tipo;
-	private List <Vacinacao> vacinacoes;
+	
 	
 	
 	public Pessoa() {
@@ -21,8 +21,7 @@ public class Pessoa {
 	}
 
 
-	public Pessoa(int id, String nome, String cpf, String sexo, LocalDate dataNascimento, TipoPessoa tipo,
-			List<Vacinacao> vacinacoes, Pais pais) {
+	public Pessoa(int id, String nome, String cpf, String sexo, LocalDate dataNascimento, Pais pais, TipoPessoa tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -31,7 +30,6 @@ public class Pessoa {
 		this.dataNascimento = dataNascimento;
 		this.pais = pais;
 		this.tipo = tipo;
-		this.vacinacoes = vacinacoes;
 	}
 
 
@@ -73,11 +71,9 @@ public class Pessoa {
 		this.sexo = sexo;
 	}
 
-
 	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
-
 
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
@@ -97,16 +93,6 @@ public class Pessoa {
 
 	public void setTipo(TipoPessoa tipo) {
 		this.tipo = tipo;
-	}
-
-
-	public List<Vacinacao> getVacinacoes() {
-		return vacinacoes;
-	}
-
-
-	public void setVacinacoes(List<Vacinacao> vacinacoes) {
-		this.vacinacoes = vacinacoes;
 	}
 }
 

@@ -16,7 +16,7 @@ public class VacinacaoService {
 	private static final int NOTA_MAXIMA = 5;
 
 	public Vacinacao salvar(Vacinacao novaVacinacao) throws ControleVacinasException {
-		if (novaVacinacao.getIdPessoa() == 0 || novaVacinacao.getVacina() == null
+		if (novaVacinacao.getPessoa().getId() == 0 || novaVacinacao.getVacina() == null
 				|| novaVacinacao.getVacina().getId() == 0) {
 			throw new ControleVacinasException("Informe o id da pessoa e a vacina da aplicação");
 		}
@@ -41,7 +41,7 @@ public class VacinacaoService {
 	private void validarAplicacao(Vacinacao novaVacinacao) throws ControleVacinasException {
 		String mensagemErro = "";
 		PessoaRepository pessoaRepository = new PessoaRepository();
-		Pessoa pessoa = pessoaRepository.consultarPorId(novaVacinacao.getIdPessoa());
+		Pessoa pessoa = pessoaRepository.consultarPorId(novaVacinacao.getPessoa().getId());
 
 		if (novaVacinacao.getVacina().getEstagio() == 1
 				&& (pessoa.getTipo() == TipoPessoa.PUBLICO_GERAL || pessoa.getTipo() == TipoPessoa.VOLUNTARIO)) {
