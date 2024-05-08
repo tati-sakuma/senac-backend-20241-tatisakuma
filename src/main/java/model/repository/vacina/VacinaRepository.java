@@ -225,6 +225,17 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			primeiro = false;
 
 		}
+		
+		if(seletor.getNomePesquisador() != null && seletor.getNomePesquisador().trim().length() > 0) {
+			if(primeiro) {
+				query += " WHERE ";
+			}else {
+				query += " AND ";
+			}
+			query += " upper(p2.nome) LIKE UPPER('%" + seletor.getNomePesquisador() + "%')";
+			primeiro = false;
+		}
+		
 
 		if (seletor.temPaginacao()) {
 			query += " LIMIT " + seletor.getLimite();
