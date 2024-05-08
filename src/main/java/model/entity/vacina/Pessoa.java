@@ -1,9 +1,8 @@
 package model.entity.vacina;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import model.entity.enums.x1.TipoPessoa;
+import model.entity.enums.TipoPessoa;
 
 public class Pessoa {
 	private int id;

@@ -1,4 +1,4 @@
-package model.entity.enums.x1;
+package model.entity.enums;
 
 public enum TipoPessoa {
 	PESQUISADOR,

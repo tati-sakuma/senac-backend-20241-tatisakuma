@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.entity.enums.x1.TipoPessoa;
+import model.entity.enums.TipoPessoa;
 import model.entity.vacina.Pessoa;
-import model.repository.x1.Banco;
-import model.repository.x1.BaseRepository;
+import model.repository.Banco;
+import model.repository.BaseRepository;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 

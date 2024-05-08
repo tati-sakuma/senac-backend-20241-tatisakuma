@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacina;
 import model.entity.vacina.Vacinacao;
-import model.repository.x1.Banco;
-import model.repository.x1.BaseRepository;
+import model.repository.Banco;
+import model.repository.BaseRepository;
 import service.vacina.VacinaService;
 
 public class VacinacaoRepository implements BaseRepository<Vacinacao> {

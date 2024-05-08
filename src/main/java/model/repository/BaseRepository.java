@@ -1,4 +1,4 @@
-package model.repository.x1;
+package model.repository;
 
 
 import java.util.ArrayList;

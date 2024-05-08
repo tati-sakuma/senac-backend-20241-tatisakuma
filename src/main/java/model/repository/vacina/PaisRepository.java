@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.sql.Statement;
 
 import model.entity.vacina.Pais;
-import model.repository.x1.Banco;
-import model.repository.x1.BaseRepository;
+import model.repository.Banco;
+import model.repository.BaseRepository;
 
 public class PaisRepository implements BaseRepository<Pais> {
 

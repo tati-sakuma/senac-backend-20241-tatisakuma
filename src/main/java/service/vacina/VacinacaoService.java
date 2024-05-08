@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import exception.vacina.ControleVacinasException;
-import model.entity.enums.x1.TipoPessoa;
+import model.entity.enums.TipoPessoa;
 import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacinacao;
 import model.repository.vacina.PessoaRepository;
@@ -16,7 +16,7 @@ public class VacinacaoService {
 	private static final int NOTA_MAXIMA = 5;
 
 	public Vacinacao salvar(Vacinacao novaVacinacao) throws ControleVacinasException {
-		if (novaVacinacao.getPessoa().getId() == 0 || novaVacinacao.getVacina() == null
+		if (novaVacinacao.getPessoa() == null || novaVacinacao.getVacina() == null
 				|| novaVacinacao.getVacina().getId() == 0) {
 			throw new ControleVacinasException("Informe o id da pessoa e a vacina da aplicação");
 		}
