@@ -1,6 +1,6 @@
 package model.seletor.vacina;
 
-public class VacinaSeletor {
+public class VacinaSeletor extends BasePaginacaoSeletor{
 	private String nomePais;
 	private String nomePesquisador;
 	private String nomeVacina;

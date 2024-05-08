@@ -3,7 +3,7 @@ package service.vacina;
 import java.util.ArrayList;
 
 import exception.vacina.ControleVacinasException;
-import model.entity.enums.x1.TipoPessoa;
+import model.entity.enums.TipoPessoa;
 import model.entity.vacina.Pessoa;
 import model.entity.vacina.Vacina;
 import model.repository.vacina.VacinaRepository;
@@ -62,5 +62,13 @@ public class VacinaService {
 
 	public ArrayList<Vacina> consultarComFiltro(VacinaSeletor seletor) {
 		return repository.consultarComFiltro(seletor);
+	}
+	
+	public int contarPaginas(VacinaSeletor seletor) {
+		return repository.contarPagina(seletor);
+	}
+	
+	public int contarTotalRegistros(VacinaSeletor seletor) {
+		return repository.contarTotalRegistros(seletor);
 	}
 }
