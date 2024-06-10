@@ -200,7 +200,8 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		Statement stmt = Banco.getStatement(conn);
 
 		ResultSet resultado = null;
-		String query = " select v.* from vacina v " + "	inner join pais p on p.ID = v.ID_PAIS "
+		String query = " select v.* from vacina v " 
+				+ "	inner join pais p on p.ID = v.ID_PAIS "
 				+ "	inner join pessoa p2 on p2.ID  = v.ID_PESQUISADOR ";
 
 		boolean primeiro = true;
@@ -236,11 +237,13 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			primeiro = false;
 		}
 		
+		query += " ORDER BY v.NOME ";
 
 		if (seletor.temPaginacao()) {
 			query += " LIMIT " + seletor.getLimite();
 			query += " OFFSET " + seletor.getOffset();
 		}
+		
 
 		try {
 			resultado = stmt.executeQuery(query);
@@ -301,6 +304,16 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 				query += " AND ";
 			}
 			query += " UPPER(p.nome) LIKE UPPER('%" + seletor.getNomePais() + "%') ";
+			primeiro = false;
+		}
+		
+		if(seletor.getNomePesquisador() != null && seletor.getNomePesquisador().trim().length() > 0) {
+			if(primeiro) {
+				query += " WHERE ";
+			}else {
+				query += " AND ";
+			}
+			query += " upper(p2.nome) LIKE UPPER('%" + seletor.getNomePesquisador() + "%')";
 			primeiro = false;
 		}
 

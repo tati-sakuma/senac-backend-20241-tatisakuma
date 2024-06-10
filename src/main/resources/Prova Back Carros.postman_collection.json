@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "283f61ab-3f8b-490b-bfef-05845accca41",
+		"name": "Prova Back Carros",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29077056"
+	},
+	"item": [
+		{
+			"name": "Montadora - Todas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/senac-20241-tatisakuma/rest/montadora/todas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"senac-20241-tatisakuma",
+						"rest",
+						"montadora",
+						"todas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Montadora - Salvar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"dataFundacao\": \"1985-08-28\",\r\n        \"nome\": \"TatiCar\",\r\n        \"nomePresidente\": \"Sakuma Tatiana\",\r\n        \"paisFundacao\": \"Brasil\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/senac-20241-tatisakuma/rest/montadora/salvar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"senac-20241-tatisakuma",
+						"rest",
+						"montadora",
+						"salvar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Carro - Filtro",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"dataFundacao\": \"1985-08-28\",\r\n        \"nome\": \"TatiCar\",\r\n        \"nomePresidente\": \"Sakuma Tatiana\",\r\n        \"paisFundacao\": \"Brasil\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/senac-20241-tatisakuma/rest/montadora/salvar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"senac-20241-tatisakuma",
+						"rest",
+						"montadora",
+						"salvar"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

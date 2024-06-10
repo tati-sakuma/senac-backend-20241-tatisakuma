@@ -13,6 +13,7 @@ import model.entity.vacina.Vacina;
 import model.entity.vacina.Vacinacao;
 import model.repository.Banco;
 import model.repository.BaseRepository;
+import model.seletor.vacina.VacinacaoSeletor;
 import service.vacina.VacinaService;
 
 public class VacinacaoRepository implements BaseRepository<Vacinacao> {
@@ -70,9 +71,9 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		Statement stmt = Banco.getStatement(conn);
 		boolean retorno = false;
 
-		String query = " UPDATE aplicacao_vacina SET " + " ID_PESSOA= " + vacinacao.getPessoa().getId() + " , ID_VACINA="
-				+ vacinacao.getVacina().getId() + " , DATA_VACINA= '" + vacinacao.getData() + "' , AVALIACAO= "
-				+ vacinacao.getAvaliacao() + " WHERE ID= " + vacinacao.getId();
+		String query = " UPDATE aplicacao_vacina SET " + " ID_PESSOA= " + vacinacao.getPessoa().getId()
+				+ " , ID_VACINA=" + vacinacao.getVacina().getId() + " , DATA_VACINA= '" + vacinacao.getData()
+				+ "' , AVALIACAO= " + vacinacao.getAvaliacao() + " WHERE ID= " + vacinacao.getId();
 		try {
 			if (stmt.executeUpdate(query) == 1) {
 				retorno = true;
@@ -101,11 +102,11 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			if (resultado.next()) {
 				vacinacao = new Vacinacao();
 				vacinacao.setId(id);
-				
+
 				PessoaRepository pessoaRepository = new PessoaRepository();
 				Pessoa pessoa = pessoaRepository.consultarPorId(resultado.getInt("ID_PESSOA"));
 				vacinacao.setPessoa(pessoa);
-				
+
 				VacinaRepository vacinaRepository = new VacinaRepository();
 				Vacina vacina = vacinaRepository.consultarPorId(resultado.getInt("ID_VACINA"));
 				vacinacao.setVacina(vacina);
@@ -141,11 +142,11 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 				Vacina vacina = vacinaRepository.consultarPorId(resultado.getInt("ID_VACINA"));
 				Vacinacao vacinacao = new Vacinacao();
 				vacinacao.setId(Integer.parseInt(resultado.getString("ID")));
-				
+
 				PessoaRepository pessoaRepository = new PessoaRepository();
 				Pessoa pessoa = pessoaRepository.consultarPorId(resultado.getInt("ID_PESSOA"));
 				vacinacao.setPessoa(pessoa);
-				
+
 				vacinacao.setVacina(vacina);
 				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
 				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
@@ -164,6 +165,36 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		return vacinacoes;
 	}
 
+	public ArrayList<Vacinacao> consultarComFiltro(VacinacaoSeletor seletor) {
+		ArrayList<Vacinacao> vacinacoes = new ArrayList<Vacinacao>();
+
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+
+		ResultSet resultado = null;
+		String query = " SELECT v.* FROM aplicacao_vacina v ";
+		
+		query = inserirFiltros(seletor, query);
+
+		return vacinacoes;
+	}
+
+	private String inserirFiltros(VacinacaoSeletor seletor, String query) {
+		boolean primeiro = true;
+
+		if (seletor.getNomePessoa() != null && seletor.getNomeVacina().trim().length() > 0) {
+			if (primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			
+			query += "UPPER()";
+		}
+		
+		return query;
+	}
+
 	public ArrayList<Vacinacao> vacinacoesPorIdPessoa(int id) {
 
 		ArrayList<Vacinacao> vacinacoes = new ArrayList<>();
@@ -176,17 +207,17 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			resultado = stmt.executeQuery(query);
 			while (resultado.next()) {
 				Vacinacao vacinacao = new Vacinacao();
-				
+
 				vacinacao.setId(id);
-				
+
 				PessoaRepository pessoaRepository = new PessoaRepository();
 				Pessoa pessoa = pessoaRepository.consultarPorId(resultado.getInt("ID_PESSOA"));
 				vacinacao.setPessoa(pessoa);
-				
+
 				VacinaService vacinaService = new VacinaService();
 				Vacina vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
 				vacinacao.setVacina(vacina);
-				
+
 				vacinacao.setData(resultado.getDate("DATA_VACINA").toLocalDate());
 				vacinacao.setAvaliacao(resultado.getInt("AVALIACAO"));
 				vacinacoes.add(vacinacao);
@@ -218,7 +249,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 				Vacina vacina = vacinaService.consultarPorId(resultado.getInt("ID_VACINA"));
 				PessoaRepository pessoaRepository = new PessoaRepository();
 				Pessoa pessoa = pessoaRepository.consultarPorId(resultado.getInt("ID_PESSOA"));
-				
+
 				vacinacao.setId(id);
 				vacinacao.setPessoa(pessoa);
 				vacinacao.setVacina(vacina);
